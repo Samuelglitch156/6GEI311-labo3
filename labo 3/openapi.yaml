@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: API de Gestion des Cours en Ligne - OpenAPI 3.0
+  description: |
+    Ceci est une API permettant de gérer le contenu des cours en ligne. Elle expose des fonctionnalités pour créer, consulter, mettre à jour, et supprimer des cours et leurs séances.
+  termsOfService: http://exemple.com/terms/
+  contact:
+    email: support@exemple.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Serveur local de développement
+paths:
+  /cours:
+    get:
+      tags:
+        - cours
+      summary: Obtenir la liste des cours
+      responses:
+        '200':
+          description: Liste des cours retournée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cours'
+    post:
+      tags:
+        - cours
+      summary: Ajouter un nouveau cours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cours'
+        required: true
+      responses:
+        '201':
+          description: Cours créé avec succès
+  /cours/{id}:
+    get:
+      tags:
+        - cours
+      summary: Obtenir un cours par son identifiant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cours retourné avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cours'
+    put:
+      tags:
+        - cours
+      summary: Mettre à jour un cours existant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cours'
+        required: true
+      responses:
+        '200':
+          description: Cours mis à jour avec succès
+    delete:
+      tags:
+        - cours
+      summary: Supprimer un cours
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cours supprimé avec succès
+  /cours/{id}/seances:
+    get:
+      tags:
+        - seances
+      summary: Obtenir la liste des séances d'un cours
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des séances retournée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Seance'
+components:
+  schemas:
+    Cours:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique du cours
+        titre:
+          type: string
+          description: Titre du cours
+        discipline:
+          type: string
+          description: Discipline associée au cours
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associés au cours
+    Seance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant de la séance
+        semaine:
+          type: integer
+          description: Numéro de la semaine
+        titre:
+          type: string
+          description: Titre de la séance
+        thematique:
+          type: string
+          description: Thématique de la séance
